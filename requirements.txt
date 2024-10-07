@@ -1,0 +1,8 @@
+python-dotenv
+langchain
+langchain_community
+langchain_core
+groq
+langchain-groq
+langchain-chroma
+chromadb
