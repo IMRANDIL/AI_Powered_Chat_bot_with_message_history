@@ -27,7 +27,7 @@ st.title("Conversational RAG With PDF uploads and chat history")
 st.write("Upload pdf's and chat with the content!")
 
 ## Input the Groq API key
-api_key = st.text_input("Enter your Groq API key:" type="password")
+api_key = st.text_input("Enter your Groq API key:", type="password")
 
 
 ## Check if groq api key is provided
@@ -118,7 +118,44 @@ if api_key:
         
         
         
+        ## get session history function now
         
+        def get_session_history(session:str) -> BaseChatMessageHistory:
+            
+            if session_id not in st.session_state.store:
+                st.session_state.store[session_id] = ChatMessageHistory()
+            return st.session_state.store[session_id]
+        
+        ## conversational rag chain now.
+        
+        conversational_rag_chain = RunnableWithMessageHistory(
+            rag_chain,
+            get_session_history,
+            input_messages_key="input",
+            history_messages_key="chat_history",
+            output_messages_key="answer"
+        )
+        
+        user_input = st.text_input("Your question:")
+        
+        if user_input:
+            session_history=get_session_history(session_id)
+            
+            ## now invoke the conversational rag chain
+            
+            response = conversational_rag_chain.invoke(
+                {"input": user_input},
+                config={
+                    "configurable": {"session_id": session_id}
+                }
+            )
+            
+            st.write(st.session_state.store)
+            st.success("Assistant:", response['answer'])
+            st.write("Chat History:", session_history.messages)
+            
+else:
+    st.warning("Please enter your api key!")    
         
                 
                 
