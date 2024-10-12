@@ -6,3 +6,5 @@ groq
 langchain-groq
 langchain-chroma
 chromadb
+streamlit
+langchain_huggingface
