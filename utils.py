@@ -139,7 +139,7 @@ if api_key:
             # Get AI response
             with st.chat_message("ai"):
                 response = conversational_rag_chain.invoke(
-                    {"input": user_input},
+                    {"input": user_input, "chat_history": get_session_history(session_id)},
                     config={
                         "configurable": {"session_id": session_id}
                     }
