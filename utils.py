@@ -43,22 +43,21 @@ if api_key:
     if 'store' not in st.session_state:
         st.session_state.store = {}
         
-    uploaded_files = st.file_uploader("Choose A PDF file", type="pdf", accept_multiple_files=False)
-    
+    uploaded_files = st.file_uploader("Choose A PDF file", type="pdf", accept_multiple_files=True)
+    # print('uploadedFiles>>>>>>>>>>>>>>>>>>', uploaded_files)
     ## process uploaded PDF's
     
     if uploaded_files:
         documents = []
-        
         for uploaded_file in uploaded_files:
+            # print('uploadedfile>>>>>>>>>>>>>>>>', uploaded_file)
             temppdf = f"./temp.pdf"
             with open(temppdf, "wb") as file:
-                file.write(uploaded_file.getvalue)
+                file.write(uploaded_file.getvalue())
                 file_name = uploaded_file.name
-                
-            loader = PyPDFLoader(temppdf)
-            docs = loader.load()
-            documents.extend(docs)
+        loader = PyPDFLoader(temppdf)
+        docs = loader.load()
+        documents.extend(docs)
             
         ## Split and create embeddings for the documents
         
@@ -120,7 +119,7 @@ if api_key:
         
         ## get session history function now
         
-        def get_session_history(session:str) -> BaseChatMessageHistory:
+        def get_session_history(session_id:str) -> BaseChatMessageHistory:
             
             if session_id not in st.session_state.store:
                 st.session_state.store[session_id] = ChatMessageHistory()
@@ -151,7 +150,7 @@ if api_key:
             )
             
             st.write(st.session_state.store)
-            st.success("Assistant:", response['answer'])
+            st.success(f"Assistant: {response['answer']}")
             st.write("Chat History:", session_history.messages)
             
 else:
