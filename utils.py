@@ -64,7 +64,7 @@ if api_key:
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
         splits = text_splitter.split_documents(documents=documents)
         vector_store = Chroma.from_documents(documents=splits, embedding=embeddings)
-        retriever = vector_store.as_retriever()
+        retriever = vector_store.as_retriever(search_kwargs={"n_results": min(4, len(splits))})
         
         ## contextualize prompts system
         contextulize_q_system_prompt = (
