@@ -62,7 +62,7 @@ To run this project, you need the following:
 5. Run the application:
 
    ```bash
-   streamlit run app.py
+   streamlit run utils.py
    ```
 
 ## Usage
